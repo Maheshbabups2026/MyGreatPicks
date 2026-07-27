@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mahesh's Picks — Amazon Finds</title>
+<title>Mahesh's Picks — Best Amazon Product Recommendations & Deals</title>
+<meta name="description" content="Curated Amazon product picks across electronics, home & kitchen, and fashion — handpicked and reviewed by Mahesh. Find honest recommendations before you buy.">
+
+<!-- Social share preview (shows up when your link is pasted on Instagram, WhatsApp, etc.) -->
+<meta property="og:title" content="Mahesh's Picks — Best Amazon Product Recommendations">
+<meta property="og:description" content="A curated shelf of Amazon products I actually use and recommend — electronics, home & kitchen, fashion, and more.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -313,7 +319,7 @@ footer .legal b{ color: var(--ink); }
 
 <section class="products" id="product-grid"></section>
 
-<div class="traffic-wrap">
+<div class="traffic-wrap" id="traffic-wrap">
   <div class="receipt">
     <h3>Traffic Receipt</h3>
     <div class="sub" id="receipt-period">This month</div>
@@ -338,21 +344,23 @@ footer .legal b{ color: var(--ink); }
    EDIT ZONE — change the data below, layout updates itself.
    ========================================================== */
 
-const YOUR_AMAZON_TAG = "maheshbabup0a-21"; // <-- put your real Associates tag here
+const YOUR_AMAZON_TAG = "yourtag-21"; // <-- put your real Associates tag here
 
 // Products now live in products.csv — open it in Excel or Google Sheets to add,
 // edit, or remove products in bulk. No code editing needed for that file.
 let PRODUCTS = [];
 
 // Paste your own numbers here whenever you check your Associates dashboard.
+// Leave clicks at 0 and the receipt stays hidden automatically.
+// Once you check your Associates dashboard, fill in real numbers here — the receipt appears on its own.
 const TRAFFIC = {
   period: "July 2026",
-  clicks: 1284,
-  visitors: 940,
-  ctr: "13.6%",
-  orders: 22,
-  conversion: "2.3%",
-  commission: "₹1,860",
+  clicks: 0,
+  visitors: 0,
+  ctr: "—",
+  orders: 0,
+  conversion: "—",
+  commission: "₹0",
   lastUpdated: "27 Jul 2026"
 };
 
@@ -413,6 +421,13 @@ function renderProducts(){
 }
 
 function renderReceipt(){
+  const wrap = document.getElementById('traffic-wrap');
+  // Hide the whole receipt section until there's real traffic to show.
+  if (!TRAFFIC.clicks || TRAFFIC.clicks === 0) {
+    wrap.style.display = "none";
+    return;
+  }
+  wrap.style.display = "flex";
   document.getElementById('receipt-period').textContent = TRAFFIC.period;
   const rows = [
     ["Clicks", TRAFFIC.clicks.toLocaleString()],
