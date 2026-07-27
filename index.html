@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahesh's Picks — Amazon Finds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   EDIT YOUR CONTENT HERE — everything below is plain data.
+   1) SITE_NAME / TAGLINE — change to your brand.
+   2) YOUR_AMAZON_TAG — your Amazon Associates tracking ID (e.g. "maheshb-21").
+   3) PRODUCTS array — add/remove/edit your products.
+   4) TRAFFIC object — paste in your own numbers whenever you check them.
+   ============================================================ */
+
+:root{
+  /* --- token system --- */
+  --paper: #EDE7D9;      /* parchment background, not pure cream */
+  --ink: #1F2A24;        /* deep forest-charcoal, near-black */
+  --tag-green: #3F6B4F;  /* primary brand — market-stall green */
+  --mustard: #D8A73D;    /* accent — price-tag gold */
+  --berry: #7A3B4A;      /* secondary accent for stats */
+  --line: #C9BFA0;       /* hairline / divider tan */
+  --card: #F7F4EA;       /* card surface, lighter than paper */
+  --display: 'Fraunces', serif;
+  --body: 'Work Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.5;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(31,42,36,0.06) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+a{ color: inherit; }
+
+/* ---------- header ---------- */
+.top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 22px 6vw;
+  border-bottom: 2px solid var(--ink);
+}
+.brand{
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+}
+.brand span{ color: var(--tag-green); }
+.disclosure-pill{
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* ---------- hero ---------- */
+.hero{
+  padding: 8vh 6vw 6vh;
+  max-width: 900px;
+}
+.eyebrow{
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--berry);
+  display:flex; align-items:center; gap:10px;
+  margin-bottom: 18px;
+}
+.eyebrow::before{
+  content:"";
+  width: 26px; height: 2px;
+  background: var(--berry);
+  display:inline-block;
+}
+.hero h1{
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.02;
+  margin: 0 0 20px;
+  letter-spacing: -0.015em;
+}
+.hero h1 em{
+  font-style: italic;
+  color: var(--tag-green);
+}
+.hero p{
+  font-size: 1.08rem;
+  max-width: 56ch;
+  color: #3a4740;
+}
+
+/* ---------- section headers ---------- */
+.section-head{
+  display:flex; align-items:baseline; gap: 16px;
+  margin: 0 6vw 26px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+.section-head h2{
+  font-family: var(--display);
+  font-size: 1.7rem;
+  margin:0;
+}
+.section-head .count{
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--berry);
+}
+
+/* ---------- category tabs ---------- */
+.tabs{
+  display:flex; flex-wrap:wrap; gap:10px;
+  padding: 0 6vw 30px;
+}
+.tab{
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.tab:hover{ background: rgba(31,42,36,0.08); }
+.tab.active{
+  background: var(--ink);
+  color: var(--paper);
+}
+.tab .n{
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+/* ---------- product grid ---------- */
+.products{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+  padding: 0 6vw 8vh;
+}
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  display:flex; flex-direction: column;
+  position: relative;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(31,42,36,0.14);
+}
+.card .tag-corner{
+  position:absolute; top:0; right:0;
+  background: var(--mustard);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-bottom-left-radius: 4px;
+}
+.card .thumb{
+  width:100%; aspect-ratio: 1/1;
+  background: repeating-linear-gradient(45deg, #e3ddc9, #e3ddc9 10px, #ddd6bd 10px, #ddd6bd 20px);
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--mono); font-size: 0.7rem; color:#8a8266;
+  text-align:center; padding: 10px;
+}
+.card .thumb img{ width:100%; height:100%; object-fit:cover; }
+.card .body{ padding: 16px 18px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
+.card h3{ font-family: var(--display); font-size: 1.08rem; margin:0; line-height:1.25; }
+.card p.blurb{ font-size: 0.88rem; color:#4b5850; margin:0; flex:1; }
+.card .price-row{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.card .price{ font-family: var(--mono); font-weight:600; font-size:1rem; color: var(--tag-green); }
+.card .rating{ font-family: var(--mono); font-size: 0.75rem; color:#8a8266; }
+.card .cta{
+  display:block; text-align:center;
+  margin-top: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.8rem; font-weight:600;
+  letter-spacing: 0.02em;
+  text-decoration:none;
+  padding: 11px;
+  border-radius: 3px;
+  transition: background .15s ease;
+}
+.card .cta:hover{ background: var(--tag-green); }
+
+/* ---------- receipt / traffic section ---------- */
+.traffic-wrap{
+  padding: 4vh 6vw 10vh;
+  display:flex; justify-content:center;
+}
+.receipt{
+  background: #FBFAF4;
+  width: min(420px, 100%);
+  padding: 30px 26px 22px;
+  font-family: var(--mono);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  position: relative;
+  box-shadow: 0 18px 40px rgba(31,42,36,0.15);
+}
+.receipt::before, .receipt::after{
+  content:"";
+  position:absolute; left:0; right:0; height:14px;
+  background-image: radial-gradient(circle, var(--paper) 7px, transparent 7.5px);
+  background-size: 20px 20px;
+  background-position: -4px 0;
+}
+.receipt::before{ top:-7px; }
+.receipt::after{ bottom:-7px; }
+.receipt h3{
+  font-family: var(--display);
+  font-size: 1.3rem;
+  text-align:center;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.receipt .sub{
+  text-align:center; font-size:0.7rem; color:#8a8266;
+  margin-bottom: 18px; letter-spacing:0.05em; text-transform:uppercase;
+}
+.receipt .divider{
+  border:none; border-top: 1px dashed var(--line); margin: 14px 0;
+}
+.receipt .row{
+  display:flex; justify-content:space-between;
+  font-size: 0.86rem; padding: 5px 0;
+}
+.receipt .row .label{ color:#54604f; }
+.receipt .row .value{ font-weight:600; }
+.receipt .total{
+  display:flex; justify-content:space-between;
+  font-size: 1rem; font-weight:700;
+  padding-top: 10px; margin-top: 8px;
+  border-top: 1px solid var(--ink);
+}
+.receipt .total .value{ color: var(--tag-green); }
+.receipt .stamp{
+  text-align:center; margin-top: 20px;
+  font-size: 0.68rem; color:#8a8266;
+  letter-spacing: 0.04em;
+}
+.receipt .barcode{
+  margin: 16px auto 0; height: 34px; width: 80%;
+  background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 5px, var(--ink) 5px 6px, transparent 6px 10px);
+  opacity: 0.85;
+}
+
+/* ---------- footer ---------- */
+footer{
+  border-top: 2px solid var(--ink);
+  padding: 26px 6vw 34px;
+  font-size: 0.82rem;
+  color: #4b5850;
+}
+footer .legal{ max-width: 70ch; }
+footer .legal b{ color: var(--ink); }
+
+@media (max-width: 640px){
+  .top{ flex-direction:column; align-items:flex-start; gap:10px; }
+  .hero{ padding: 6vh 6vw 5vh; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">Mahesh's <span>Picks</span></div>
+  <div class="disclosure-pill">Amazon Associate</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Curated finds, checked by hand</div>
+  <h1>Stuff I actually <em>buy</em>,<br>not just link.</h1>
+  <p>A short, honest shelf of things I use and recommend. Every card below links out to Amazon through my associate link — it costs you nothing extra, and helps keep this page running.</p>
+</section>
+
+<div class="section-head">
+  <h2>The shelf</h2>
+  <span class="count" id="product-count">0 items</span>
+</div>
+
+<div class="tabs" id="category-tabs"></div>
+
+<section class="products" id="product-grid"></section>
+
+<div class="traffic-wrap">
+  <div class="receipt">
+    <h3>Traffic Receipt</h3>
+    <div class="sub" id="receipt-period">This month</div>
+    <div id="receipt-rows"></div>
+    <div class="total">
+      <span class="label">Est. Commission</span>
+      <span class="value" id="receipt-commission">—</span>
+    </div>
+    <div class="stamp" id="receipt-stamp">Updated —</div>
+    <div class="barcode"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="legal">
+    <p><b>Disclosure:</b> As an Amazon Associate, I earn from qualifying purchases. Prices and availability shown here may not reflect what's on Amazon at the time of purchase — always check the product page before buying.</p>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================
+   EDIT ZONE — change the data below, layout updates itself.
+   ========================================================== */
+
+const YOUR_AMAZON_TAG = "yourtag-21"; // <-- put your real Associates tag here
+
+// category is a free-text label — use the same folder names you used on Linktree.
+const PRODUCTS = [
+  {
+    name: "Wireless Mechanical Keyboard",
+    blurb: "Compact 75% layout, hot-swappable switches. What I type this on daily.",
+    price: "₹3,499",
+    rating: "4.5★ (2.1k)",
+    tagLabel: "Editor's pick",
+    category: "Electronics",
+    asin: "B0EXAMPLE1",
+    image: ""
+  },
+  {
+    name: "USB-C Docking Station",
+    blurb: "Single cable to dual monitors, ethernet, and charging. Cleaned up my desk.",
+    price: "₹2,199",
+    rating: "4.3★ (860)",
+    tagLabel: "Best value",
+    category: "Electronics",
+    asin: "B0EXAMPLE2",
+    image: ""
+  },
+  {
+    name: "1TB Portable SSD",
+    blurb: "Pocket-sized backup drive, fast enough for video editing on the go.",
+    price: "₹5,999",
+    rating: "4.6★ (3.4k)",
+    tagLabel: "Trending",
+    category: "Electronics",
+    asin: "B0EXAMPLE3",
+    image: ""
+  },
+  {
+    name: "Cast Iron Skillet",
+    blurb: "Pre-seasoned, holds heat evenly. My go-to for weekend cooking.",
+    price: "₹1,299",
+    rating: "4.7★ (5.2k)",
+    tagLabel: "",
+    category: "Home & Kitchen",
+    asin: "B0EXAMPLE4",
+    image: ""
+  },
+  {
+    name: "Running Shoes",
+    blurb: "Lightweight daily trainer, good cushioning for pavement runs.",
+    price: "₹3,999",
+    rating: "4.4★ (1.8k)",
+    tagLabel: "",
+    category: "Fashion",
+    asin: "B0EXAMPLE5",
+    image: ""
+  }
+];
+
+// Paste your own numbers here whenever you check your Associates dashboard.
+const TRAFFIC = {
+  period: "July 2026",
+  clicks: 1284,
+  visitors: 940,
+  ctr: "13.6%",
+  orders: 22,
+  conversion: "2.3%",
+  commission: "₹1,860",
+  lastUpdated: "27 Jul 2026"
+};
+
+/* ==========================================================
+   Rendering — no need to touch below this line.
+   ========================================================== */
+
+function affiliateLink(asin){
+  return `https://www.amazon.in/dp/${asin}?tag=${YOUR_AMAZON_TAG}`;
+}
+
+let activeCategory = "All";
+
+function renderTabs(){
+  const tabsEl = document.getElementById('category-tabs');
+  const categories = ["All", ...new Set(PRODUCTS.map(p => p.category))];
+  tabsEl.innerHTML = categories.map(cat => {
+    const count = cat === "All" ? PRODUCTS.length : PRODUCTS.filter(p => p.category === cat).length;
+    return `<button class="tab ${cat === activeCategory ? 'active' : ''}" data-cat="${cat}">${cat} <span class="n">${count}</span></button>`;
+  }).join('');
+  tabsEl.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderTabs();
+      renderProducts();
+    });
+  });
+}
+
+function renderProducts(){
+  const grid = document.getElementById('product-grid');
+  const visible = activeCategory === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
+  document.getElementById('product-count').textContent = visible.length + (visible.length === 1 ? " item" : " items");
+  grid.innerHTML = visible.map(p => `
+    <div class="card">
+      <div class="tag-corner">${p.tagLabel || ''}</div>
+      <div class="thumb">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : 'Add product photo'}
+      </div>
+      <div class="body">
+        <h3>${p.name}</h3>
+        <p class="blurb">${p.blurb}</p>
+        <div class="price-row">
+          <span class="price">${p.price}</span>
+          <span class="rating">${p.rating}</span>
+        </div>
+        <a class="cta" href="${affiliateLink(p.asin)}" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReceipt(){
+  document.getElementById('receipt-period').textContent = TRAFFIC.period;
+  const rows = [
+    ["Clicks", TRAFFIC.clicks.toLocaleString()],
+    ["Unique visitors", TRAFFIC.visitors.toLocaleString()],
+    ["Click-through rate", TRAFFIC.ctr],
+    ["Orders", TRAFFIC.orders],
+    ["Conversion rate", TRAFFIC.conversion],
+  ];
+  document.getElementById('receipt-rows').innerHTML = rows.map(([label, value]) => `
+    <div class="row"><span class="label">${label}</span><span class="value">${value}</span></div>
+  `).join('') + '<hr class="divider">';
+  document.getElementById('receipt-commission').textContent = TRAFFIC.commission;
+  document.getElementById('receipt-stamp').textContent = "Updated " + TRAFFIC.lastUpdated;
+}
+
+renderTabs();
+renderProducts();
+renderReceipt();
+</script>
+
+</body>
+</html>
