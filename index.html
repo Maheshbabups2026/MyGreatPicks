@@ -340,6 +340,8 @@ footer .legal b{ color: var(--ink); }
 const YOUR_AMAZON_TAG = "yourtag-21"; // <-- put your real Associates tag here
 
 // category is a free-text label — use the same folder names you used on Linktree.
+// link: paste EITHER your full SiteStripe link (already has your tag baked in)
+//       OR just the bare ASIN (e.g. "B0EXAMPLE1") and we'll build the tagged link for you.
 const PRODUCTS = [
   {
     name: "Wireless Mechanical Keyboard",
@@ -348,7 +350,7 @@ const PRODUCTS = [
     rating: "4.5★ (2.1k)",
     tagLabel: "Editor's pick",
     category: "Electronics",
-    asin: "B0EXAMPLE1",
+    link: "B0EXAMPLE1",
     image: ""
   },
   {
@@ -358,7 +360,7 @@ const PRODUCTS = [
     rating: "4.3★ (860)",
     tagLabel: "Best value",
     category: "Electronics",
-    asin: "B0EXAMPLE2",
+    link: "B0EXAMPLE2",
     image: ""
   },
   {
@@ -368,7 +370,7 @@ const PRODUCTS = [
     rating: "4.6★ (3.4k)",
     tagLabel: "Trending",
     category: "Electronics",
-    asin: "B0EXAMPLE3",
+    link: "B0EXAMPLE3",
     image: ""
   },
   {
@@ -378,7 +380,7 @@ const PRODUCTS = [
     rating: "4.7★ (5.2k)",
     tagLabel: "",
     category: "Home & Kitchen",
-    asin: "B0EXAMPLE4",
+    link: "B0EXAMPLE4",
     image: ""
   },
   {
@@ -388,7 +390,7 @@ const PRODUCTS = [
     rating: "4.4★ (1.8k)",
     tagLabel: "",
     category: "Fashion",
-    asin: "B0EXAMPLE5",
+    link: "B0EXAMPLE5",
     image: ""
   }
 ];
@@ -409,8 +411,15 @@ const TRAFFIC = {
    Rendering — no need to touch below this line.
    ========================================================== */
 
-function affiliateLink(asin){
-  return `https://www.amazon.in/dp/${asin}?tag=${YOUR_AMAZON_TAG}`;
+function affiliateLink(link){
+  // Paste EITHER a full SiteStripe link (already has your tag) OR just the bare ASIN.
+  if (!link) return "#";
+  if (link.startsWith("http")) {
+    // Full link pasted from SiteStripe — already tagged, use it as-is.
+    return link;
+  }
+  // Otherwise treat it as an ASIN and build the tagged link ourselves.
+  return `https://www.amazon.in/dp/${link}?tag=${YOUR_AMAZON_TAG}`;
 }
 
 let activeCategory = "All";
@@ -448,7 +457,7 @@ function renderProducts(){
           <span class="price">${p.price}</span>
           <span class="rating">${p.rating}</span>
         </div>
-        <a class="cta" href="${affiliateLink(p.asin)}" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+        <a class="cta" href="${affiliateLink(p.link)}" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
       </div>
     </div>
   `).join('');
