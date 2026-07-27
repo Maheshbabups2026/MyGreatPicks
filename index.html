@@ -6,6 +6,7 @@
 <title>Mahesh's Picks — Amazon Finds</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 
 /* ============================================================
@@ -339,61 +340,9 @@ footer .legal b{ color: var(--ink); }
 
 const YOUR_AMAZON_TAG = "yourtag-21"; // <-- put your real Associates tag here
 
-// category is a free-text label — use the same folder names you used on Linktree.
-// link: paste EITHER your full SiteStripe link (already has your tag baked in)
-//       OR just the bare ASIN (e.g. "B0EXAMPLE1") and we'll build the tagged link for you.
-const PRODUCTS = [
-  {
-    name: "Wireless Mechanical Keyboard",
-    blurb: "Compact 75% layout, hot-swappable switches. What I type this on daily.",
-    price: "₹3,499",
-    rating: "4.5★ (2.1k)",
-    tagLabel: "Editor's pick",
-    category: "Electronics",
-    link: "B0EXAMPLE1",
-    image: ""
-  },
-  {
-    name: "USB-C Docking Station",
-    blurb: "Single cable to dual monitors, ethernet, and charging. Cleaned up my desk.",
-    price: "₹2,199",
-    rating: "4.3★ (860)",
-    tagLabel: "Best value",
-    category: "Electronics",
-    link: "B0EXAMPLE2",
-    image: ""
-  },
-  {
-    name: "1TB Portable SSD",
-    blurb: "Pocket-sized backup drive, fast enough for video editing on the go.",
-    price: "₹5,999",
-    rating: "4.6★ (3.4k)",
-    tagLabel: "Trending",
-    category: "Electronics",
-    link: "B0EXAMPLE3",
-    image: ""
-  },
-  {
-    name: "Cast Iron Skillet",
-    blurb: "Pre-seasoned, holds heat evenly. My go-to for weekend cooking.",
-    price: "₹1,299",
-    rating: "4.7★ (5.2k)",
-    tagLabel: "",
-    category: "Home & Kitchen",
-    link: "B0EXAMPLE4",
-    image: ""
-  },
-  {
-    name: "Running Shoes",
-    blurb: "Lightweight daily trainer, good cushioning for pavement runs.",
-    price: "₹3,999",
-    rating: "4.4★ (1.8k)",
-    tagLabel: "",
-    category: "Fashion",
-    link: "B0EXAMPLE5",
-    image: ""
-  }
-];
+// Products now live in products.csv — open it in Excel or Google Sheets to add,
+// edit, or remove products in bulk. No code editing needed for that file.
+let PRODUCTS = [];
 
 // Paste your own numbers here whenever you check your Associates dashboard.
 const TRAFFIC = {
@@ -479,8 +428,36 @@ function renderReceipt(){
   document.getElementById('receipt-stamp').textContent = "Updated " + TRAFFIC.lastUpdated;
 }
 
-renderTabs();
-renderProducts();
+function loadProductsAndRender(){
+  Papa.parse('products.csv', {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results){
+      PRODUCTS = results.data
+        .filter(row => row.name && row.name.trim() !== "")
+        .map(row => ({
+          name: row.name ? row.name.trim() : "",
+          blurb: row.blurb ? row.blurb.trim() : "",
+          price: row.price ? row.price.trim() : "",
+          rating: row.rating ? row.rating.trim() : "",
+          tagLabel: row.tagLabel ? row.tagLabel.trim() : "",
+          category: row.category ? row.category.trim() : "Other",
+          link: row.link ? row.link.trim() : "",
+          image: row.image ? row.image.trim() : ""
+        }));
+      renderTabs();
+      renderProducts();
+    },
+    error: function(err){
+      document.getElementById('product-grid').innerHTML =
+        '<p style="font-family: var(--mono); font-size: 0.85rem; color: var(--berry);">Could not load products.csv — make sure it\'s uploaded in the same folder as this page.</p>';
+      console.error('CSV load error:', err);
+    }
+  });
+}
+
+loadProductsAndRender();
 renderReceipt();
 </script>
 
